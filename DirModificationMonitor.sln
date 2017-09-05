@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMM.Main", "DMM.Main\DMM.Main.csproj", "{66EB00D0-F854-4A4E-9DF1-EC34A82CCF26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMM.Common", "DMM.Common\DMM.Common.csproj", "{C0351958-D29A-461D-84CC-839CBCD44927}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMM.Behaviors.AutoBakup", "DMM.AutoBakup\DMM.Behaviors.AutoBakup.csproj", "{48036AA2-E115-4480-9E91-9FC1E6CACE0E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{66EB00D0-F854-4A4E-9DF1-EC34A82CCF26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66EB00D0-F854-4A4E-9DF1-EC34A82CCF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66EB00D0-F854-4A4E-9DF1-EC34A82CCF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66EB00D0-F854-4A4E-9DF1-EC34A82CCF26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0351958-D29A-461D-84CC-839CBCD44927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0351958-D29A-461D-84CC-839CBCD44927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0351958-D29A-461D-84CC-839CBCD44927}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0351958-D29A-461D-84CC-839CBCD44927}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48036AA2-E115-4480-9E91-9FC1E6CACE0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48036AA2-E115-4480-9E91-9FC1E6CACE0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48036AA2-E115-4480-9E91-9FC1E6CACE0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48036AA2-E115-4480-9E91-9FC1E6CACE0E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
