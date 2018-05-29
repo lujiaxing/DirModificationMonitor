@@ -40,19 +40,19 @@ namespace DMM.Behaviors.AutoBakup
             String extactProgram = parameters["ExtactProgram"]; //解压缩程序路径
             String extactProgramArg = parameters["ExtactProgramArg"]; //解压缩程序执行参数
             String extactedPath = parameters["ExtactPath"]; //解压目标地址
-            String webSiteBasePath = parameters["WebSiteBasePath"]; //目标基准目录
+            String webSiteBasePath = parameters["TargetBasePath"]; //目标基准目录
             String bakupBasePath = parameters["BakupBasePath"]; //备份基准目录
 
 
             //标准化路径格式(去掉路径最后的 "\", 以便后续处理)
-            extactedPath = extactedPath.EndsWith("\\") ? extactedPath.Remove(extactedPath.Length - 1, 1) : extactedPath;
-            webSiteBasePath = webSiteBasePath.EndsWith("\\") ? webSiteBasePath.Remove(webSiteBasePath.Length - 1, 1) : webSiteBasePath;
-            bakupBasePath = bakupBasePath.EndsWith("\\") ? bakupBasePath.Remove(bakupBasePath.Length - 1, 1) : bakupBasePath;
+            extactedPath = extactedPath.TrimEnd(Path.DirectorySeparatorChar);
+            webSiteBasePath = webSiteBasePath.TrimEnd(Path.DirectorySeparatorChar);
+            bakupBasePath = bakupBasePath.TrimEnd(Path.DirectorySeparatorChar);
 
             Logger.Instance.WriteInfoLog(
-                String.Format("\nExtactProgram = {0}\nExtactProgramArg = {1}\nExtactPath = {2}" +
-                "\nWebSiteBasePath = {3}\nBakupBasePath = {4}",
-                extactProgram, extactProgramArg, extactedPath, webSiteBasePath, bakupBasePath));
+                String.Format("{5}ExtactProgram = {0}{5}ExtactProgramArg = {1}{5}ExtactPath = {2}" +
+                "{5}TargetBasePath = {3}{5}BakupBasePath = {4}",
+                extactProgram, extactProgramArg, extactedPath, webSiteBasePath, bakupBasePath, Environment.NewLine));
 
             //X:\xxx\xxx\20140722180622_123\
             //将压缩包单独解压到一个路径下, 后续操作以此为准.
@@ -60,7 +60,7 @@ namespace DMM.Behaviors.AutoBakup
                 DateTime.Now.ToString("yyyyMMddHHmmss_") + 
                 Path.GetFileNameWithoutExtension(modificationArg.FullPath);
 
-            extactedPath = extactedPath + "\\" + bakBathDirName;
+            extactedPath = extactedPath + Path.DirectorySeparatorChar + bakBathDirName;
 
             Directory.CreateDirectory(extactedPath);
             Logger.Instance.WriteInfoLog("该批次文件备份放置于: " + extactedPath + " 目录已创建.");
@@ -90,11 +90,11 @@ namespace DMM.Behaviors.AutoBakup
 
             //递归备份
             Logger.Instance.WriteInfoLog("备份开始.");
-            BakupRecursive(extactedPath, webSiteBasePath, bakupBasePath + "\\" + bakBathDirName);
+            BakupRecursive(extactedPath, webSiteBasePath, bakupBasePath + Path.DirectorySeparatorChar + bakBathDirName);
 
             //递归覆盖
             Logger.Instance.WriteInfoLog("备份成功, 开始复制文件.");
-            ConverRecursive(extactedPath, webSiteBasePath, bakupBasePath + "\\" + bakBathDirName);
+            ConverRecursive(extactedPath, webSiteBasePath, bakupBasePath + Path.DirectorySeparatorChar + bakBathDirName);
 
             Logger.Instance.WriteInfoLog("自动处理结束.");
             return OperationResult.Success;
@@ -125,8 +125,8 @@ namespace DMM.Behaviors.AutoBakup
                     Logger.Instance.WriteInfoLog("所在目录结构不存在, 已在操作目录创建: " + webSiteBasePath);
                 }
 
-                String source = path + "\\" + fileName;
-                String dest = webSiteBasePath + "\\" + fileName;
+                String source = path + Path.DirectorySeparatorChar + fileName;
+                String dest = webSiteBasePath + Path.DirectorySeparatorChar + fileName;
 
                 Logger.Instance.WriteInfoLog(String.Format("正在复制文件: {0} 到 {1}", source, dest));
                 File.Copy(source, dest, true);
@@ -134,11 +134,11 @@ namespace DMM.Behaviors.AutoBakup
 
             foreach (String dir in dirsNeedToConver)
             {
-                String currentDirName = dir.Substring(dir.LastIndexOf("\\") + 1);
+                String currentDirName = dir.Substring(dir.LastIndexOf(Path.DirectorySeparatorChar) + 1);
 
                 Logger.Instance.WriteInfoLog("复制 - 处理下级目录: " + currentDirName);
 
-                ConverRecursive(path + "\\" + currentDirName, webSiteBasePath + "\\" + currentDirName, bakupTarget + "\\" + currentDirName);
+                ConverRecursive(path + Path.DirectorySeparatorChar + currentDirName, webSiteBasePath + Path.DirectorySeparatorChar + currentDirName, bakupTarget + Path.DirectorySeparatorChar + currentDirName);
             }
         }
 
@@ -174,12 +174,12 @@ namespace DMM.Behaviors.AutoBakup
                     Logger.Instance.WriteInfoLog("备份目标所在目录结构不存在, 已在备份目录创建: " + bakupTarget);
                 }
 
-                String source = webSiteBasePath + "\\" + fileName;
-                String dest = bakupTarget + "\\" + fileName;
+                String source = webSiteBasePath + Path.DirectorySeparatorChar + fileName;
+                String dest = bakupTarget + Path.DirectorySeparatorChar + fileName;
 
                 Logger.Instance.WriteInfoLog(String.Format("正在复制文件: {0} 到 {1}", source, dest));
 
-                if (File.Exists(webSiteBasePath + "\\" + fileName))
+                if (File.Exists(webSiteBasePath + Path.DirectorySeparatorChar + fileName))
                     File.Copy(source, dest, true);
                 else
                     Logger.Instance.WriteInfoLog(String.Format("备份源中的文件: {0} 不存在, 忽略备份.", source));
@@ -187,11 +187,11 @@ namespace DMM.Behaviors.AutoBakup
 
             foreach (String dir in dirsNeedToBakup)
             {
-                String currentDirName = dir.Substring(dir.LastIndexOf("\\") + 1);
+                String currentDirName = dir.Substring(dir.LastIndexOf(Path.DirectorySeparatorChar) + 1);
 
                 Logger.Instance.WriteInfoLog("备份 - 处理下级目录: " + currentDirName);
 
-                BakupRecursive(path + "\\" + currentDirName, webSiteBasePath + "\\" + currentDirName, bakupTarget + "\\" + currentDirName);
+                BakupRecursive(path + Path.DirectorySeparatorChar + currentDirName, webSiteBasePath + Path.DirectorySeparatorChar + currentDirName, bakupTarget + Path.DirectorySeparatorChar + currentDirName);
             }
             
         }

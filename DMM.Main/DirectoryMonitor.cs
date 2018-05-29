@@ -58,10 +58,9 @@ namespace DMM
         /// </summary>
         public void Initialize()
         {
-            watcher = new FileSystemSafeWatcher();
+            watcher = new FileSystemSafeWatcher(DirectoryToMonitor);
 
             watcher.NotifyFilter = NotifyFilters.LastWrite;
-            watcher.Path = DirectoryToMonitor;
             watcher.IncludeSubdirectories = !CurrentLevelOnly;
 
             watcher.Changed += (sender, e) =>
